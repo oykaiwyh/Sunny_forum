@@ -9,7 +9,6 @@ const Reset = () => import( /* webpackChunkName: "reset" */ '../views/Reset.vue'
 
 
 Vue.use(VueRouter)
-l
 const routes = [{
     path: '/login',
     name: 'Login',
