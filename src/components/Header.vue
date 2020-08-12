@@ -2,8 +2,7 @@
   <div class="fly-header layui-bg-black">
     <div class="layui-container">
       <a class="fly-logo" href="/">
-        <!-- <img src="../res/images/logo.png" alt="layui" /> -->
-        <img src="../assets/logo.png" alt="layui" />
+        <img src="../assets/logo-2.png" alt="layui" />
       </a>
       <ul class="layui-nav fly-nav layui-hide-xs">
         <li class="layui-nav-item layui-this">
@@ -17,7 +16,7 @@
           </a>
         </li>
         <li class="layui-nav-item">
-          <a href="/" target="_blank">
+          <a href="http://www.layui.com/" target="_blank">
             <i class="iconfont icon-ui"></i>框架
           </a>
         </li>
@@ -75,8 +74,15 @@
 </template>
 
 <script>
-export default {};
+export default {
+  name: 'Header'
+}
 </script>
 
 <style lang="scss" scoped>
+.fly-logo {
+  left: -15px;
+  top: -10px;
+  margin-left: 15px;
+}
 </style>
