@@ -7,13 +7,24 @@ const Login = () => import( /* webpackChunkName: "login" */ '@/views/Login.vue')
 const Register = () => import( /* webpackChunkName: "register" */ '@/views/Register.vue')
 const Reset = () => import( /* webpackChunkName: "reset" */ '@/views/Reset.vue')
 const Home = () => import( /* webpackChunkName: "home" */ '@/views/Home.vue')
-
+const Index = () =>
+  import( /* webpackChunkName: 'index' */ '@/views/changes/index.vue')
+const Template = () =>
+  import( /* webpackChunkName: 'itemplate' */ '@/views/changes/Template.vue')
 
 Vue.use(VueRouter)
 const routes = [{
     path: '/',
-    name: 'home',
-    component: Home
+    // name: 'home',
+    component: Home,
+    children: [{
+      path: '',
+      component: Index
+    }, {
+      path: '/index/:catalog',
+      name: 'catalog',
+      component: Template
+    }, ]
   },
   {
     path: '/login',
@@ -42,6 +53,8 @@ const routes = [{
 ]
 
 const router = new VueRouter({
+  //   linkActiveClass: 'layui-this', // 包含
+  linkExactActiveClass: 'layui-this', // 完全匹配
   routes
 })
 

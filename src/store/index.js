@@ -4,12 +4,18 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 export default new Vuex.Store({
+  modules: {},
   state: {
+    sid: '',
+    isLogin: false,
+    token: ''
   },
   mutations: {
+    setSid(state, value) {
+      state.sid = value
+    }
   },
   actions: {
-  },
-  modules: {
+
   }
 })
