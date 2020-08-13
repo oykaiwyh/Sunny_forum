@@ -149,42 +149,42 @@
 </template>
 
 <script>
-import { getCode, reg } from '@/api/login'
-import { ValidationProvider, ValidationObserver } from 'vee-validate'
+import { getCode, reg } from "@/api/login";
+import { ValidationProvider, ValidationObserver } from "vee-validate";
 
 export default {
-  name: 'reg',
-  data () {
+  name: "reg",
+  data() {
     return {
-      username: '',
-      name: '',
-      password: '',
-      repassword: '',
-      code: '',
-      svg: ''
-    }
+      username: "",
+      name: "",
+      password: "",
+      repassword: "",
+      code: "",
+      svg: ""
+    };
   },
   components: {
     ValidationProvider,
     ValidationObserver
   },
-  mounted () {
-    this._getCode()
+  mounted() {
+    this._getCode();
   },
   methods: {
-    _getCode () {
-      let sid = this.$store.state.sid
-      getCode(sid).then((res) => {
+    _getCode() {
+      let sid = this.$store.state.sid;
+      getCode(sid).then(res => {
         if (res.code === 200) {
-          this.svg = res.data
+          this.svg = res.data;
         }
-      })
+      });
     },
-    async submit () {
-      const isValid = await this.$refs.observer.validate()
+    async submit() {
+      const isValid = await this.$refs.observer.validate();
       if (!isValid) {
         // ABORT!!
-        return
+        return;
       }
       reg({
         username: this.username,
@@ -192,31 +192,30 @@ export default {
         name: this.name,
         code: this.code,
         sid: this.$store.state.sid
-      }).then((res) => {
+      }).then(res => {
         if (res.code === 200) {
-          this.username = ''
-          this.password = ''
-          this.repassword = ''
-          this.name = ''
-          this.code = ''
+          this.username = "";
+          this.password = "";
+          this.repassword = "";
+          this.name = "";
+          this.code = "";
           requestAnimationFrame(() => {
-            this.$refs.observer.reset()
-          })
+            this.$refs.observer.reset();
+          });
           // 跳转到登录界面，让用户登录
-          this.$alert('注册成功')
+          this.$alert("注册成功");
           setTimeout(() => {
-            this.$router.push('/login')
-          }, 1000)
-          //console.log(res)
+            this.$router.push("/login");
+          }, 1000);
         } else {
           // username -> '用户名已经注册'
           // res.msg = { username: [], name: [], code: []}
-          this.$refs.observer.setErrors(res.msg)
+          this.$refs.observer.setErrors(res.msg);
         }
-      })
+      });
     }
   }
-}
+};
 </script>
 <style lang="scss" scoped>
 // 公用样式可以放在App.vue中
