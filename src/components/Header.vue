@@ -79,4 +79,9 @@ export default {};
 </script>
 
 <style lang="scss" scoped>
+.fly-logo {
+  position: absolute;
+  top: 3px;
+  left: -15px;
+}
 </style>

@@ -14,7 +14,7 @@ export default {
   name: "app",
   components: {
     "sunny-header": Header,
-    "sunny-footer": Header
+    "sunny-footer": Footer
   }
 };
 </script>
