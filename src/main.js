@@ -7,9 +7,11 @@ import axios from 'axios'
 
 // import '@/util/veevalidate/veevalidate.js'
 import '@/util/veevalidate/veevalidate-i18n.js'
-
+import Alert from '@/components/modules/alert'
 // axios.defaults.baseURL = process.env.NODE_ENV !== 'production' ? 'http://localhost:3000' : ''
 
+
+Vue.use(Alert)
 
 new Vue({
   router,
