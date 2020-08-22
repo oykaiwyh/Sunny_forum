@@ -6,11 +6,15 @@ import axios from 'axios'
 import config from '@/config'
 import errorHandle from './errorHandle'
 
+const CancelToken = axios.CancelToken // 定义取消token
+
 // class改写
 
 class HttpRequest {
   constructor(baseURL) {
     this.baseURL = baseURL
+    this.cancelapi = {}
+
   }
   // 获取axios配置
   getInsideConfig() {
@@ -24,13 +28,34 @@ class HttpRequest {
     return config
   }
 
+  removeRequest(key, isRequest = false) {
+    if (this.cancelapi[key] && isRequest) {
+      this.cancelapi[key]('取消重复请求')
+    }
+    // console.log('  this.cancelapi[key]', this.cancelapi);
+    // console.log(' delete this.cancelapi[key]', delete this.cancelapi[key]);
+    delete this.cancelapi[key]
+  }
+
   // 设定拦截器
   interceptors(instance) {
 
     // 请求拦截器 Add a request interceptor
     instance.interceptors.request.use((config) => {
       // Do something before request is sent
-      console.log('config', config);
+      //   console.log('config', config);
+
+      config.cancelToken = new CancelToken((c) => {
+        //   c >>> 是一个可执行的函数，当成形参传递了 
+        //  即 c相当于clearTime(timer) 里的timer ，即请求
+        // An executor function receives a cancel function as a parameter
+        // cancel = c;
+        let key = config.url + '&' + config.method
+        this.removeRequest(key, true)
+        this.cancelapi[key] = c
+      })
+
+
       return config;
     }, (error) => {
       // Do something with request error
@@ -42,7 +67,9 @@ class HttpRequest {
     instance.interceptors.response.use((res) => {
       // Any status code that lie within the range of 2xx cause this function to trigger
       // Do something with response data
-      console.log('cc', res);
+
+      let key = res.config.url + '&' + res.config.method
+      this.removeRequest(key)
 
       if (res.status === 200) {
         // return Promise.resolve(res.data)

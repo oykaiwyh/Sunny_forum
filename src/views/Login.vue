@@ -167,13 +167,16 @@ export default {
       })
         .then(res => {
           if (res.code === 200) {
+            this.$store.commit("setIslogin", true);
+            this.$store.commit("setUserInfo", res.data);
             this.username = "";
             this.password = "";
             this.code = "";
             requestAnimationFrame(() => {
-              console.log(this.$refs);
-              this.$refs.observer.reset();
+              //   console.log(this.$refs);
+              this.$refs.observer ? this.$refs.observer.reset() : "";
             });
+            this.$router.push({ name: "index" });
           } else if (res.code === 404) {
             this.$refs.procode.setErrors([res.msg]);
           } else if (res.code === 401) {
