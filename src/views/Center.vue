@@ -8,7 +8,7 @@
         :key="'center'+index"
       >
         <a href>
-          <i class="iconforum" :class="item.icon"></i>
+          <i class="layui-icon" :class="item.icon"></i>
           {{item.name}}
         </a>
       </li>
@@ -24,23 +24,35 @@ export default {
       lists: [
         {
           name: "我的主页",
-          icon: "icon-home"
+          icon: "layui-icon-home",
+          link: "home"
+        },
+        {
+          name: "用户中心",
+          icon: "layui-icon-friends",
+          link: "center"
         },
         {
           name: "基本设置",
-          icon: "icon-Settingscontroloptions"
+          icon: "layui-icon-set",
+          link: "info",
+          activeClass: "layui-this"
         },
         {
-          name: "我的贴子",
-          icon: "icon-doc"
+          name: "我的帖子",
+          icon: "layui-icon-form",
+          link: "mypost",
+          activeClass: "layui-this"
         },
         {
           name: "我的消息",
-          icon: "icon-message"
+          icon: "layui-icon-reply-fill",
+          link: "msg"
         },
         {
-          name: "其它设置",
-          icon: "icon-Settingscontroloptions"
+          name: "其他设置",
+          icon: "layui-icon-component",
+          link: "others"
         }
       ]
     };

@@ -3,7 +3,7 @@
     <div class="layui-container">
       <a class="fly-logo" href="/">
         <!-- <img src="../res/images/logo.png" alt="layui" /> -->
-        <img src="../assets/logo.png" alt="layui" />
+        <img src="@/assets/img/logo.png" alt="layui" />
       </a>
       <ul class="layui-nav fly-nav layui-hide-xs">
         <li class="layui-nav-item layui-this">
