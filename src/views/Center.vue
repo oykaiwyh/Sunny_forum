@@ -7,12 +7,13 @@
         v-for="(item,index) in lists"
         :key="'center'+index"
       >
-        <a href>
+        <router-link :to="{name:item.link}">
           <i class="layui-icon" :class="item.icon"></i>
           {{item.name}}
-        </a>
+        </router-link>
       </li>
     </ul>
+    <router-view></router-view>
   </div>
 </template>
 
@@ -25,23 +26,23 @@ export default {
         {
           name: "我的主页",
           icon: "layui-icon-home",
-          link: "home"
+          link: "User"
         },
         {
           name: "用户中心",
           icon: "layui-icon-friends",
-          link: "center"
+          link: "Center"
         },
         {
           name: "基本设置",
           icon: "layui-icon-set",
-          link: "info",
+          link: "set",
           activeClass: "layui-this"
         },
         {
           name: "我的帖子",
           icon: "layui-icon-form",
-          link: "mypost",
+          link: "post",
           activeClass: "layui-this"
         },
         {

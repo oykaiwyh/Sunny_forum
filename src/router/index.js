@@ -7,13 +7,15 @@ const Login = () => import( /* webpackChunkName: "login" */ '../views/Login.vue'
 const Register = () => import( /* webpackChunkName: "register" */ '../views/Register.vue')
 const Reset = () => import( /* webpackChunkName: "reset" */ '../views/Reset.vue')
 const Home = () => import( /* webpackChunkName: "Home" */ '../views/Home.vue')
-
-const Index = () =>
-  import( /* webpackChunkName: 'index' */ '@/views/changes/index.vue')
-const Template = () =>
-  import( /* webpackChunkName: 'itemplate' */ '@/views/changes/Template.vue')
-const Center = () =>
-  import( /* webpackChunkName: 'itemplate' */ '@/views/Center.vue')
+const Index = () => import( /* webpackChunkName: 'index' */ '@/views/changes/index.vue')
+const Template = () => import( /* webpackChunkName: 'itemplate' */ '@/views/changes/Template.vue')
+const Center = () => import( /* webpackChunkName: 'Center' */ '@/views/Center.vue')
+const User = () => import( /* webpackChunkName: 'User' */ '@/views/User.vue')
+const Selfcenter = () => import( /* webpackChunkName: 'selfcenter' */ '@/components/user/selfcenter.vue')
+const Settings = () => import( /* webpackChunkName: 'user-settings' */ '@/components/user/Settings.vue')
+const Posts = () => import( /* webpackChunkName: 'user-posts' */ '@/components/user/Posts.vue')
+const Others = () => import( /* webpackChunkName: 'user-others' */ '@/components/user/Others.vue')
+const Msg = () => import( /* webpackChunkName: 'user-msg' */ '@/components/user/Msg.vue')
 
 Vue.use(VueRouter)
 const routes = [{
@@ -54,10 +56,41 @@ const routes = [{
     path: '/reset',
     name: 'Reset',
     component: Reset
-  }, {
+  },
+  {
+    path: '/user/:uid',
+    name: 'User',
+    props: true,
+    component: User
+  },
+  {
     path: '/center',
-    name: 'Center',
-    component: Center
+    // name: 'Center',
+    component: Center,
+    linkActiveClass: 'layui-this', // 完全匹配
+    children: [{
+        path: '',
+        name: 'Center',
+        component: Selfcenter
+      }, {
+        path: 'set',
+        name: 'set',
+        component: Settings
+      }, {
+        path: 'other',
+        name: 'others',
+        component: Others
+      }, {
+        path: 'post',
+        name: 'post',
+        component: Posts
+      }, {
+        path: 'msg',
+        name: 'msg',
+        component: Msg
+      },
+
+    ]
   },
 ]
 
