@@ -1,5 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import store from '@/store/index'
+import jwt from 'jsonwebtoken'
+// import moment from 'moment' //包太大
+import moment from 'dayjs'
 
 // 路由懒加载
 // 组件中定义name值需要对应的webpackChunkName的值
@@ -17,7 +21,22 @@ const Posts = () => import( /* webpackChunkName: 'user-posts' */ '@/components/u
 const Others = () => import( /* webpackChunkName: 'user-others' */ '@/components/user/Others.vue')
 const Msg = () => import( /* webpackChunkName: 'user-msg' */ '@/components/user/Msg.vue')
 
+const MyInfo = () => import( /* webpackChunkName: 'info' */ '@/components/user/common/MyInfo.vue')
+const PicUpload = () => import( /* webpackChunkName: 'uploadpic' */ '@/components/user/common/PicUpload.vue')
+const Passwd = () => import( /* webpackChunkName: 'password' */ '@/components/user/common/Passwd.vue')
+const Accounts = () => import( /* webpackChunkName: 'accounts' */ '@/components/user/common/Accounts.vue')
+const MyPost = () => import( /* webpackChunkName: 'mypost' */ '@/components/user/common/MyPost.vue')
+const MyCollection = () => import( /* webpackChunkName: 'mycollection' */ '@/components/user/common/MyCollection.vue')
+const NotFind = () => import( /* webpackChunkName: 'notfind' */ '@/views/NotFind.vue')
+
 Vue.use(VueRouter)
+// 解决相同路由跳转问题
+const routerPush = VueRouter.prototype.push;
+VueRouter.prototype.push = function push(location) {
+  return routerPush.call(this, location).catch(error => error);
+};
+
+
 const routes = [{
     path: '/',
     // name: 'Home',
@@ -67,6 +86,9 @@ const routes = [{
     path: '/center',
     // name: 'Center',
     component: Center,
+    meta: {
+      requireAuth: true
+    },
     linkActiveClass: 'layui-this', // 完全匹配
     children: [{
         path: '',
@@ -74,16 +96,48 @@ const routes = [{
         component: Selfcenter
       }, {
         path: 'set',
-        name: 'set',
-        component: Settings
+        // name: 'set',
+        component: Settings,
+        children: [{
+            path: '',
+            name: 'info',
+            component: MyInfo
+          },
+          {
+            path: 'pic',
+            name: 'pic',
+            component: PicUpload
+          },
+          {
+            path: 'passwd',
+            name: 'passwd',
+            component: Passwd
+          },
+          {
+            path: 'account',
+            name: 'account',
+            component: Accounts
+          }
+        ]
       }, {
         path: 'other',
         name: 'others',
         component: Others
       }, {
         path: 'post',
-        name: 'post',
-        component: Posts
+        // name: 'post',
+        component: Posts,
+        children: [{
+            path: '',
+            name: 'mypost',
+            component: MyPost
+          },
+          {
+            path: 'mycollection',
+            name: 'mycollection',
+            component: MyCollection
+          }
+        ]
       }, {
         path: 'msg',
         name: 'msg',
@@ -92,6 +146,13 @@ const routes = [{
 
     ]
   },
+  {
+    path: "/404",
+    component: NotFind
+  }, {
+    path: '*',
+    redirect: '/404'
+  }
 ]
 
 const router = new VueRouter({
@@ -99,6 +160,46 @@ const router = new VueRouter({
   //   linkActiveClass: 'layui-this', // 包含
   linkExactActiveClass: 'layui-this', // 完全匹配
   routes
+})
+
+router.beforeEach((to, from, next) => {
+  // to and from are both route objects. must call `next`.
+  const token = localStorage.getItem('token')
+  const userInfo = JSON.parse(localStorage.getItem('userInfo'))
+
+
+
+  if (token !== '' && token !== null) {
+    const payload = jwt.decode(token)
+    // console.log(payload);
+    // console.log(moment().isBefore(moment(payload.exp * 1000)));
+    if (moment().isBefore(moment(payload.exp * 1000))) {
+      store.commit("setIslogin", true);
+      store.commit("setToken", token);
+      store.commit("setUserInfo", userInfo);
+    } else {
+      localStorage.clear()
+    }
+  }
+  if (to.matched.some(record => record.meta.requireAuth)) {
+    //用户需要登录的页面
+    const {
+      isLogin
+    } = store.state
+    if (isLogin) {
+      //权限的判断
+      next()
+    } else {
+      next({
+        name: 'Login'
+      })
+    }
+  } else {
+    //用户不需要登录的页面
+    next()
+  }
+
+
 })
 
 export default router

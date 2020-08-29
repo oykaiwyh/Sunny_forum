@@ -27,7 +27,7 @@
         <!-- 未登入的状态 -->
         <template v-if="!isShow">
           <li class="layui-nav-item">
-            <a class="iconfont icon-touxiang layui-hide-xs" href="../user/login.html"></a>
+            <a class="iconfont icon-touxiang layui-hide-xs" href></a>
           </li>
           <li class="layui-nav-item">
             <router-link :to="{name:'Login'}">登入</router-link>
@@ -66,12 +66,12 @@
             </a>
             <dl class="layui-nav-child layui-anim layui-anim-upbit" :class="{'layui-show':isHover}">
               <dd>
-                <a href="user/set.html">
+                <router-link :to="{name:'info'}">
                   <i class="layui-icon">&#xe620;</i>基本设置
-                </a>
+                </router-link>
               </dd>
               <dd>
-                <a href="user/message.html">
+                <a href="user/msg">
                   <i class="iconfont icon-tongzhi" style="top: 4px;"></i>我的消息
                 </a>
               </dd>
@@ -82,7 +82,7 @@
               </dd>
               <hr style="margin: 5px 0;" />
               <dd>
-                <a href="/user/logout/" style="text-align: center;">退出</a>
+                <a href="javscript:void(0)" style="text-align: center;" @click="logout">退出</a>
               </dd>
             </dl>
           </li>
@@ -148,6 +148,19 @@ export default {
       this.hoverCtrl = setTimeout(() => {
         this.isHover = false;
       }, 500);
+    },
+    logout() {
+      this.$confirm(
+        "确定退出码？",
+        () => {
+          localStorage.clear();
+          this.$store.commit("setIslogin", false);
+          this.$store.commit("setToken", "");
+          this.$store.commit("setUserInfo", "");
+          this.$router.push({ name: "index" });
+        },
+        () => {}
+      );
     }
   }
 };

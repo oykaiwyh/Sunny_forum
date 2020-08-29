@@ -5,6 +5,7 @@
 import axios from 'axios'
 import config from '@/config'
 import errorHandle from './errorHandle'
+import store from '@/store/index'
 
 const CancelToken = axios.CancelToken // 定义取消token
 
@@ -21,7 +22,8 @@ class HttpRequest {
     const config = {
       baseUrl: this.baseURL,
       headers: {
-        'Content-Type': 'application/json;charset=utf-8'
+        'Content-Type': 'application/json;charset=utf-8',
+        Authorization: 'Bearer ' + store.state.token,
       },
       timeout: 10000,
     }

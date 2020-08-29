@@ -47,7 +47,7 @@ export default {
       this.isShow = false;
     },
     closeMash() {
-      if (this.type === "type") {
+      if (this.type === "alert") {
         this.close();
       }
     },

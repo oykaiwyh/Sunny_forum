@@ -53,12 +53,12 @@
 </template>
 
 <script>
-import moment from 'moment'
-import 'moment/locale/zh-cn'
+import moment from "moment";
+import "moment/locale/zh-cn";
 
-import _ from 'lodash'
+import _ from "lodash";
 export default {
-  name: 'listitem',
+  name: "listitem",
   props: {
     lists: {
       default: () => [],
@@ -74,49 +74,49 @@ export default {
     }
   },
   computed: {
-    items () {
-      _.map(this.lists, (item) => {
+    items() {
+      _.map(this.lists, item => {
         switch (item.catalog) {
-          case 'ask':
-            item.catalog = '提问'
-            break
-          case 'share':
-            item.catalog = '分享'
-            break
-          case 'logs':
-            item.catalog = '动态'
-            break
-          case 'notice':
-            item.catalog = '公告'
-            break
-          case 'advise':
-            item.catalog = '建议'
-            break
-          case 'discuss':
-            item.catalog = '交流'
-            break
+          case "ask":
+            item.catalog = "提问";
+            break;
+          case "share":
+            item.catalog = "分享";
+            break;
+          case "logs":
+            item.catalog = "动态";
+            break;
+          case "notice":
+            item.catalog = "公告";
+            break;
+          case "advise":
+            item.catalog = "建议";
+            break;
+          case "discuss":
+            item.catalog = "交流";
+            break;
         }
-      })
-      return this.lists
+      });
+      return this.lists;
     }
   },
   methods: {
-    more () {
-      this.$emit('nextpage')
+    more() {
+      this.$emit("nextpage");
     }
   },
   filters: {
-    moment (date) {
+    moment(date) {
       // 超过7天，显示日期
-      if (moment(date).isBefore(moment().subtract(7, 'days'))) {
-        return moment(date).format('YYYY-MM-DD')
+      if (moment(date).isBefore(moment().subtract(7, "days"))) {
+        return moment(date).format("YYYY-MM-DD");
       } else {
         // 1小前，xx小时前，X天前
-        return moment(date).from(moment())
+        return moment(date).from(moment());
       }
     }
   }
-}
+};
 </script>
 
 <style lang="scss" scoped>
