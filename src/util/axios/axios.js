@@ -3,9 +3,9 @@
  * 对错误得统一处理
  */
 import axios from 'axios'
-import config from '@/config'
 import errorHandle from './errorHandle'
 import store from '@/store/index'
+import PublicConfig from '@/config'
 
 const CancelToken = axios.CancelToken // 定义取消token
 
@@ -23,7 +23,6 @@ class HttpRequest {
       baseUrl: this.baseURL,
       headers: {
         'Content-Type': 'application/json;charset=utf-8',
-        Authorization: 'Bearer ' + store.state.token,
       },
       timeout: 10000,
     }
@@ -47,6 +46,17 @@ class HttpRequest {
       // Do something before request is sent
       //   console.log('config', config);
 
+      let isPublic = false
+      PublicConfig.publicPath.map(path => {
+        isPublic = isPublic || path.test(config.url)
+      })
+      //   Cookies.set('name', token);
+
+      const token = store.state.token
+      if (!isPublic && token) {
+        config.headers.Authorization = 'Bearer ' + token
+        // config.Cookie = token
+      }
       config.cancelToken = new CancelToken((c) => {
         //   c >>> 是一个可执行的函数，当成形参传递了 
         //  即 c相当于clearTime(timer) 里的timer ，即请求

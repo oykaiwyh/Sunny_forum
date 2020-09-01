@@ -12,8 +12,7 @@ const getList = (options) => {
   //     }
   // })
   // qs的引用 字符串的转换
-  console.log('ssssss', options);
-
+  //   console.log('ssssss', options);
   return axios.get('/public/list?', +qs.stringify(options))
 }
 // 温馨提醒

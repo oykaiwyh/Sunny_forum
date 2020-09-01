@@ -19,7 +19,7 @@ import axios from '@/util/axios/axiosrequest'
 // 封装axios改写
 const getCode = (sid) => {
   //   return axios.get('/getCaptcha?sid=' + sid)
-  return axios.get('/getCaptcha', {
+  return axios.get('/public/getCaptcha', {
     params: {
       sid
     }
@@ -48,7 +48,7 @@ const getCode = (sid) => {
  */
 // 封装改写
 const reset = (options) => {
-  return axios.post('/reset', {
+  return axios.post('/login/reset', {
     ...options
   })
 }
@@ -60,7 +60,7 @@ const reset = (options) => {
  */
 // 封装改写
 const login = (options) => {
-  return axios.post('/login', {
+  return axios.post('/login/login', {
     ...options
   })
 }
@@ -71,7 +71,7 @@ const login = (options) => {
  */
 // 封装改写
 const register = (options) => {
-  return axios.post('/register', {
+  return axios.post('/login/register', {
     ...options
   })
 }
