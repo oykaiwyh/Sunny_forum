@@ -1,6 +1,6 @@
 <template>
   <transition name="fade">
-    <div class="layui-layer-page layui-layer-prompt edit-content" v-show="isShow" ref="wrapper">
+    <div class="layui-layer-page layui-layer-prompt edit-content" v-show="isShow">
       <div class="layui-layer-title">请输入合法链接</div>
       <div class="layui-layer-content">
         <input type="text" class="layui-layer-input" id="linkInput" v-model="link" />
@@ -19,41 +19,14 @@
 <script>
 export default {
   name: "linkadd",
-  props: ["isShow", "ctrl"],
+  props: ["isShow"],
   data() {
     return {
       link: ""
     };
   },
-  mounted() {
-    this.$nextTick(() => {
-      //   document.querySelector("body").addEventListener("click", e => {
-      //     this.handleOtherClick(e);
-      //   });
-      document
-        .querySelector("body")
-        .addEventListener("click", this.handleOtherClick);
-    });
-  },
-  beforeDestroy() {
-    document
-      .querySelector("body")
-      .removeEventListener("click", this.handleOtherClick);
-  },
+
   methods: {
-    handleOtherClick(e) {
-      // 触发隐藏本组件的关闭事件
-      //判断是否点击到了非控制Icon以外的地方 + 本组件的地方
-      e.stopPropagation(); //防止事件冒泡
-      if (typeof this.ctrl === "undefined") {
-        return;
-      }
-      if (
-        !(this.ctrl.contains(e.target) || this.$refs.wrapper.contains(e.target))
-      ) {
-        this.cancel();
-      }
-    },
     submit() {
       if (this.link === "") {
         document.getElementById("linkInput").focus();

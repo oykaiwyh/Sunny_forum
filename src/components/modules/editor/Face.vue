@@ -16,26 +16,11 @@
 import faces from "@/assets/js/face";
 export default {
   name: "face",
-  props: ["isShow", "ctrl"],
+  props: ["isShow"],
   data() {
     return {
       lists: faces
     };
-  },
-  mounted() {
-    this.$nextTick(() => {
-      //   document.querySelector("body").addEventListener("click", e => {
-      //     this.handleOtherClick(e);
-      //   });
-      document
-        .querySelector("body")
-        .addEventListener("click", this.handleOtherClick);
-    });
-  },
-  beforeDestroy() {
-    document
-      .querySelector("body")
-      .removeEventListener("click", this.handleOtherClick);
   },
   methods: {
     handleFaceClick(item) {

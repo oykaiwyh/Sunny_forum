@@ -49,47 +49,18 @@ import { uploadImg } from "@/api/content";
 import config from "@/config";
 export default {
   name: "imgUpload",
-  props: ["isShow", "ctrl"],
+  props: ["isShow"],
   data() {
     return {
       pic: "",
       formData: ""
     };
   },
-  mounted() {
-    this.$nextTick(() => {
-      //   document.querySelector("body").addEventListener("click", e => {
-      //     this.handleOtherClick(e);
-      //   });
-      document
-        .querySelector("body")
-        .addEventListener("click", this.handleOtherClick);
-    });
-  },
-  beforeDestroy() {
-    document
-      .querySelector("body")
-      .removeEventListener("click", this.handleOtherClick);
-  },
   methods: {
     handleFaceClick(item) {
       this.$emit("addEvent", item);
     },
-    handleOtherClick(e) {
-      // 触发隐藏本组件的关闭事件
-      //判断是否点击到了非控制Icon以外的地方 + 本组件的地方
-      e.stopPropagation(); //防止事件冒泡
-      if (typeof this.ctrl === "undefined") {
-        return;
-      }
-      if (
-        !(this.ctrl.contains(e.target) || this.$refs.wrapper.contains(e.target))
-      ) {
-        this.$emit("closeEvent");
-        this.pic = "";
-        this.formData = "";
-      }
-    },
+
     close() {
       this.$emit("closeEvent");
       this.pic = "";
