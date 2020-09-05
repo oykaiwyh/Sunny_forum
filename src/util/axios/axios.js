@@ -51,7 +51,6 @@ class HttpRequest {
         isPublic = isPublic || path.test(config.url)
       })
       //   Cookies.set('name', token);
-
       const token = store.state.token
       if (!isPublic && token) {
         config.headers.Authorization = 'Bearer ' + token
@@ -114,12 +113,12 @@ class HttpRequest {
     }, config)
     return this.request(options)
   }
-  post(url, data) {
+  post(url, data, config) {
     const options = Object.assign({
       method: 'post',
       url: url,
       data: data
-    })
+    }, config)
     return this.request(options)
   }
 

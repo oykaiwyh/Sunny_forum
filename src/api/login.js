@@ -47,8 +47,8 @@ const getCode = (sid) => {
  * @param {*} options 用户信息(邮箱，验证码)
  */
 // 封装改写
-const reset = (options) => {
-  return axios.post('/login/reset', {
+const forget = (options) => {
+  return axios.post('/login/forget', {
     ...options
   })
 }
@@ -76,9 +76,20 @@ const register = (options) => {
   })
 }
 
+
+/**
+ * 重置密码接口
+ * @param {*} info 重置密码信息
+ */
+const reset = (info) => axios.post('/login/reset', {
+  ...info
+})
+
+
 export {
   getCode,
-  reset,
+  forget,
   login,
-  register
+  register,
+  reset
 }

@@ -57,7 +57,7 @@
 
 <script>
 import { ValidationProvider, ValidationObserver } from "vee-validate";
-// import { changePasswd } from "@/api/user";
+import { changePasswd } from "@/api/user";
 export default {
   name: "password",
   components: {
@@ -70,34 +70,35 @@ export default {
       password: "",
       repassword: ""
     };
+  },
+  methods: {
+    async submit() {
+      const isValid = await this.$refs.observer.validate();
+      if (!isValid) {
+        return;
+      }
+      if (this.oldpassword === this.password) {
+        this.$alert("新旧密码不得相同");
+        return;
+      }
+      changePasswd({
+        oldpwd: this.oldpassword,
+        newpwd: this.password
+      }).then(res => {
+        if (res.code === 200) {
+          this.$alert("密码已经更新成功");
+          this.oldpassword = "";
+          this.password = "";
+          this.repassword = "";
+          requestAnimationFrame(() => {
+            this.$refs.observer.reset();
+          });
+        } else if (res.code === 500) {
+          this.$alert(`${res.msg}`);
+        }
+      });
+    }
   }
-  //   methods: {
-  //     async submit () {
-  //       const isValid = await this.$refs.observer.validate()
-  //       if (!isValid) {
-  //         // ABORT!!
-  //         return
-  //       }
-  //       if (this.oldpassword === this.password) {
-  //         this.$alert('新旧密码不得相同，请确认！')
-  //         return
-  //       }
-  //       changePasswd({
-  //         oldpwd: this.oldpassword,
-  //         newpwd: this.password
-  //       }).then((res) => {
-  //         if (res.code === 200) {
-  //           this.$alert('密码更新成功！')
-  //           this.oldpassword = ''
-  //           this.password = ''
-  //           this.repassword = ''
-  //           requestAnimationFrame(() => {
-  //             this.$refs.observer.reset()
-  //           })
-  //         }
-  //       })
-  //     }
-  //   }
 };
 </script>
 

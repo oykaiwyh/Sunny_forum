@@ -201,7 +201,6 @@ export default {
           console.log(this.$refs.observer);
           this.$refs.observer.reset();
           requestAnimationFrame(() => {
-            console.log(this);
             this.$refs.observer.reset();
           });
           //   window.requestAnimationFrame(() => {

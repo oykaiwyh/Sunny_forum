@@ -4,103 +4,105 @@
       <div class="layui-tab layui-tab-brief" lay-filter="user">
         <ul class="layui-tab-title">
           <li>
-            <router-link :to="{name: 'Login'}">登入</router-link>
+            <router-link to="/login">登录</router-link>
           </li>
           <li class="layui-this">
-            找回密码
-            <!--重置密码-->
+            <router-link to="/forget">重置密码</router-link>
           </li>
         </ul>
         <div class="layui-form layui-tab-content" id="LAY_ucm" style="padding: 20px 0;">
-          <div class="layui-tab-item layui-show">
-            <!-- 重置密码 -->
-            <!--
-          <div class="fly-msg">{{d.username}}，请重置您的密码</div>
-          <div class="layui-form layui-form-pane"  style="margin-top: 30px;">
-            <form action="/user/repass" method="post">
-              <div class="layui-form-item">
-                <label for="L_pass" class="layui-form-label">密码</label>
-                <div class="layui-input-inline">
-                  <input type="password" id="L_pass" name="pass" required lay-verify="required" autocomplete="off" class="layui-input">
-                </div>
-                <div class="layui-form-mid layui-word-aux">6到16个字符</div>
-              </div>
-              <div class="layui-form-item">
-                <label for="L_repass" class="layui-form-label">确认密码</label>
-                <div class="layui-input-inline">
-                  <input type="password" id="L_repass" name="repass" required lay-verify="required" autocomplete="off" class="layui-input">
-                </div>
-              </div>
-              <div class="layui-form-item">
-                <label for="L_vercode" class="layui-form-label">人类验证</label>
-                <div class="layui-input-inline">
-                  <input type="text" id="L_vercode" name="vercode" required lay-verify="required" placeholder="请回答后面的问题" autocomplete="off" class="layui-input">
-                </div>
-                <div class="layui-form-mid">
-                  <span style="color: #c00;">{{d.vercode}}</span>
-                </div>
-              </div>
-              <div class="layui-form-item">
-                <input type="hidden" name="username" value="{{d.username}}">
-                <input type="hidden" name="email" value="{{d.email}}">
-                <button class="layui-btn" alert="1" lay-filter="*" lay-submit>提交</button>
-              </div>
-            </form>
-          </div>
-
-          <div class="fly-error">该重置密码链接已失效，请重新校验您的信息</div>
-          <div class="fly-error">非法链接，请重新校验您的信息</div>
-            -->
-
-            <div class="layui-form layui-form-pane">
-              <form method="post">
-                <div class="layui-form-item">
-                  <label for="L_email" class="layui-form-label">用户名</label>
-                  <validation-provider name="email" rules="required|email" v-slot="{errors}">
-                    <div class="layui-input-inline">
-                      <input
-                        type="text"
-                        name="username"
-                        v-model="username"
-                        placeholder="请输入用户名"
-                        autocomplete="off"
-                        class="layui-input"
-                      />
-                    </div>
-                    <div class="layui-form-mid">
-                      <span style="color: #c00;">{{errors[0]}}</span>
-                    </div>
-                  </validation-provider>
-                </div>
-                <div class="layui-form-item">
-                  <validation-provider name="code" rules="required|length:4" v-slot="{errors}">
-                    <div class="layui-row">
-                      <label for="L_vercode" class="layui-form-label">验证码</label>
-                      <div class="layui-input-inline">
-                        <input
-                          type="text"
-                          name="code"
-                          v-model="code"
-                          placeholder="请输入验证码"
-                          autocomplete="off"
-                          class="layui-input"
-                        />
+          <validation-observer ref="observer" v-slot="{ validate }">
+            <div class="layui-tab-item layui-show">
+              <div class="layui-form layui-form-pane">
+                <form>
+                  <div class="layui-form-item">
+                    <ValidationProvider
+                      name="password"
+                      rules="required|min:6|max:16|confirmed:confirmation"
+                      v-slot="{ errors }"
+                    >
+                      <div class="layui-row">
+                        <label for="L_phone" class="layui-form-label">新密码</label>
+                        <div class="layui-input-inline">
+                          <input
+                            type="password"
+                            id="L_phone"
+                            name="phone"
+                            v-model="password"
+                            class="layui-input"
+                          />
+                        </div>
+                        <div class="layui-form-mid layui-word-aux">6到16个字符</div>
                       </div>
-                      <div class>
-                        <span class="svg" style="color: #c00;" @click="_getCode()" v-html="svg"></span>
+                      <div class="layui-row">
+                        <span style="color: #c00;">{{errors[0]}}</span>
                       </div>
-                    </div>
-                    <div class="layui-form-mid">
-                      <span style="color: #c00;">{{errors[0]}}</span>
-                    </div>
-                  </validation-provider>
-                </div>
-                <div class="layui-form-item">
-                  <button type="button" class="layui-btn" alert="1" @click="submit()">提交</button>
-                </div>
-              </form>
+                    </ValidationProvider>
+                  </div>
+                  <div class="layui-form-item">
+                    <ValidationProvider
+                      v-slot="{ errors }"
+                      vid="confirmation"
+                      name="repassword"
+                      rules="required|min:6|max:16"
+                    >
+                      <div class="layui-row">
+                        <label for="L_imagecode1" class="layui-form-label">确认密码</label>
+                        <div class="layui-input-inline">
+                          <input
+                            type="password"
+                            name="repassword"
+                            v-model="repassword"
+                            class="layui-input"
+                          />
+                        </div>
+                      </div>
+                      <div class="layui-row">
+                        <span style="color: #c00;">{{errors[0]}}</span>
+                      </div>
+                    </ValidationProvider>
+                  </div>
+
+                  <div class="layui-form-item">
+                    <validation-provider
+                      name="code"
+                      ref="codefield"
+                      rules="required|length:4"
+                      v-slot="{errors}"
+                    >
+                      <div class="layui-row">
+                        <label for="L_vercode" class="layui-form-label">验证码</label>
+                        <div class="layui-input-inline">
+                          <input
+                            type="text"
+                            v-model="code"
+                            placeholder="请输入验证码"
+                            autocomplete="off"
+                            class="layui-input"
+                          />
+                        </div>
+                        <div
+                          class="layui-form-mid"
+                          v-html="svg"
+                          @click="_getCode()"
+                          id="img"
+                          style="padding: 0 !important;width: 150px;"
+                        ></div>
+                      </div>
+                      <div class="layui-row">
+                        <div class="layui-form-mid">
+                          <span style="color: #c00;">{{errors[0]}}</span>
+                        </div>
+                      </div>
+                    </validation-provider>
+                  </div>
+                  <div class="layui-form-item">
+                    <button class="layui-btn" type="button" @click="submit()">提交</button>
+                  </div>
+                </form>
+              </div>
             </div>
-          </div>
+          </validation-observer>
         </div>
       </div>
     </div>
@@ -108,23 +110,36 @@
 </template>
 
 <script>
+import { ValidationProvider, ValidationObserver } from "vee-validate";
 import { getCode, reset } from "@/api/login";
-import { ValidationProvider } from "vee-validate";
-
+import { getParam } from "@/util/common";
+import uuid from "uuid/dist/v4";
 export default {
-  name: "forget",
+  name: "reg",
   components: {
-    ValidationProvider
+    ValidationProvider,
+    ValidationObserver
   },
   data() {
     return {
-      username: "",
+      key: "",
+      password: "",
+      repassword: "",
       code: "",
       svg: ""
     };
   },
   mounted() {
+    let sid = "";
+    if (localStorage.getItem("sid")) {
+      sid = localStorage.getItem("sid");
+    } else {
+      sid = uuid();
+      localStorage.setItem("sid", sid);
+    }
+    this.$store.commit("setSid", sid);
     this._getCode();
+    this.key = getParam("key");
   },
   methods: {
     _getCode() {
@@ -135,14 +150,30 @@ export default {
         }
       });
     },
-    submit() {
+    async submit() {
+      const isValid = await this.$refs.observer.validate();
+      if (!isValid) {
+        // ABORT!!
+        return;
+      }
       reset({
-        username: this.username,
+        key: this.key,
+        password: this.password,
+        sid: this.$store.state.sid,
         code: this.code
       }).then(res => {
-        console.log(res);
         if (res.code === 200) {
-          alert("邮件发送成功");
+          this.$alert("密码修改成功！");
+          setTimeout(() => {
+            this.$router.push("/login");
+          }, 1000);
+        } else {
+          this._getCode();
+          if (res.msg instanceof Object) {
+            this.$refs.observer.setErrors(res.msg);
+          } else {
+            this.$alert(res.msg);
+          }
         }
       });
     }
@@ -151,5 +182,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// 公用样式可以放在App.vue中
 </style>

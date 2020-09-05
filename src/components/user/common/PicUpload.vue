@@ -22,47 +22,52 @@
 </template>
 
 <script>
-// import { uploadImg } from "@/api/content";
-// import { updateUserInfo } from "@/api/user";
+import { uploadImg } from "@/api/content";
+import { updateUserInfo } from "@/api/user";
+import config from "@/config";
 export default {
   name: "pic-upload",
   data() {
     return {
-      // 判断 userInfo & pic 是否存在
       pic:
-        this.$store.state.userInfo && this.$store.state.userInfo.pic
+        this.$store.state.userInfo && this.$store.state.userInfo.pic //undefined的判断
           ? this.$store.state.userInfo.pic
-          : "/img/bear-200-200.jpg",
+          : "/img/header.jpg",
       formData: ""
     };
+  },
+  methods: {
+    upload(e) {
+      let file = e.target.files;
+      //异步上传图片
+      let formData = new FormData();
+      if (file.length > 0) {
+        formData.append("file", file[0]);
+        this.formData = formData;
+      }
+      //   上传图片之后
+      uploadImg(formData).then(res => {
+        //更新用户基本资料
+        if (res.code === 200) {
+          const baseUrl =
+            process.env.NODE_ENV === "production"
+              ? config.baseUrl.pro
+              : config.baseUrl.dev;
+          this.pic = baseUrl + res.data;
+          updateUserInfo({ pic: this.pic }).then(res => {
+            if (res.code === 200) {
+              //   修改全局用户信息
+              let user = this.$store.state.userInfo;
+              user.pic = this.pic;
+              this.$store.commit("setUserInfo", user);
+              this.$alert("图片上传成功");
+            }
+          });
+          document.getElementById("pic").value = "";
+        }
+      });
+    }
   }
-  //   methods: {
-  //     upload (e) {
-  //       let file = e.target.files
-  //       let formData = new FormData()
-  //       if (file.length > 0) {
-  //         formData.append('file', file[0])
-  //         this.formData = formData
-  //       }
-  //       // 上传图片的之后 -> uploadImg
-  //       uploadImg(formData).then((res) => {
-  //         if (res.code === 200) {
-  //           this.pic = res.data
-  //           // 更新用户基本资料 -> updateUserInfo
-  //           updateUserInfo({ pic: this.pic }).then((res) => {
-  //             if (res.code === 200) {
-  //               // 修改全局的 store 内的用户基础信息
-  //               let user = this.$store.state.userInfo
-  //               this.$set(this.$store.state.userInfo, 'pic', this.pic)
-  //               this.$store.commit('setUserInfo', user)
-  //               this.$alert('图片上传成功')
-  //             }
-  //           })
-  //           document.getElementById('pic').value = ''
-  //         }
-  //       })
-  //     }
-  //   }
 };
 </script>
 

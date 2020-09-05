@@ -87,7 +87,7 @@
                       type="button"
                     >立即登录</button>
                     <span style="padding-left:20px;">
-                      <router-link :to="{name:'Reset'}">忘记密码</router-link>
+                      <router-link :to="{name:'forget'}">忘记密码</router-link>
                     </span>
                   </div>
                   <div class="layui-form-item fly-form-app">

@@ -21,7 +21,7 @@ export default {
 
 <style lang="scss">
 @import "assets/css/global.css";
-// @import 'assets/css/layui-layer/layer.css';
+@import "assets/css/layui-layer/layer.css";
 // @import "assets/css/utilities.scss";
 
 // 公用样式

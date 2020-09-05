@@ -9,7 +9,7 @@ import moment from 'dayjs'
 // 组件中定义name值需要对应的webpackChunkName的值
 const Login = () => import( /* webpackChunkName: "login" */ '../views/Login.vue')
 const Register = () => import( /* webpackChunkName: "register" */ '../views/Register.vue')
-const Reset = () => import( /* webpackChunkName: "reset" */ '../views/Reset.vue')
+const Forget = () => import( /* webpackChunkName: "forget" */ '../views/Forget.vue')
 const Home = () => import( /* webpackChunkName: "Home" */ '../views/Home.vue')
 const Index = () => import( /* webpackChunkName: 'index' */ '@/views/changes/index.vue')
 const Template = () => import( /* webpackChunkName: 'itemplate' */ '@/views/changes/Template.vue')
@@ -28,6 +28,9 @@ const Accounts = () => import( /* webpackChunkName: 'accounts' */ '@/components/
 const MyPost = () => import( /* webpackChunkName: 'mypost' */ '@/components/user/common/MyPost.vue')
 const MyCollection = () => import( /* webpackChunkName: 'mycollection' */ '@/components/user/common/MyCollection.vue')
 const NotFind = () => import( /* webpackChunkName: 'notfind' */ '@/views/NotFind.vue')
+const Confirm = () => import( /* webpackChunkName: 'confirm' */ '@/views/Confirm.vue')
+const Reset = () => import( /* webpackChunkName: 'reset' */ '@/views/Reset.vue')
+const Add = () => import( /* webpackChunkName: 'add' */ '@/components/contents/Add.vue')
 
 Vue.use(VueRouter)
 // 解决相同路由跳转问题
@@ -57,6 +60,16 @@ const routes = [{
     component: Login
   },
   {
+    path: '/confirm',
+    name: 'confirm',
+    component: Confirm
+  },
+  {
+    path: '/reset',
+    name: 'reset',
+    component: Reset
+  },
+  {
     path: '/register',
     name: 'Register',
     // route level code-splitting
@@ -72,9 +85,14 @@ const routes = [{
       }
     }
   }, {
-    path: '/reset',
-    name: 'Reset',
-    component: Reset
+    path: '/forget',
+    name: 'forget',
+    component: Forget
+  },
+  {
+    path: '/add',
+    name: 'add',
+    component: Add
   },
   {
     path: '/user/:uid',
@@ -156,7 +174,7 @@ const routes = [{
 ]
 
 const router = new VueRouter({
-  mode: 'history',
+  //   mode: 'history',
   //   linkActiveClass: 'layui-this', // 包含
   linkExactActiveClass: 'layui-this', // 完全匹配
   routes

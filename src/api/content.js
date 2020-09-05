@@ -30,10 +30,25 @@ const getLinks = () => {
   return axios.get('/public/links')
 }
 
+// 图片上传
+const uploadImg = (formData) => {
+  //   console.log(formData);
+  //   自定义headers头部,但是在对axios封装的时候需要对头部的配置 config 参数
+  //   const config = {
+  //     headers: {
+  //       token: 'xxx'
+  //     }
+  //   }
+  //   return axios.post('/content/upload', formData, config)
+  return axios.post('/content/upload', formData)
+}
+
+
 
 export {
   getList,
   getTips,
   getTop,
-  getLinks
+  getLinks,
+  uploadImg
 }
