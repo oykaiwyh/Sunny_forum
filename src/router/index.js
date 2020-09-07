@@ -31,6 +31,7 @@ const NotFind = () => import( /* webpackChunkName: 'notfind' */ '@/views/NotFind
 const Confirm = () => import( /* webpackChunkName: 'confirm' */ '@/views/Confirm.vue')
 const Reset = () => import( /* webpackChunkName: 'reset' */ '@/views/Reset.vue')
 const Add = () => import( /* webpackChunkName: 'add' */ '@/components/contents/Add.vue')
+const Detail = () => import( /* webpackChunkName: 'detail' */ '@/components/contents/Detail.vue')
 
 Vue.use(VueRouter)
 // 解决相同路由跳转问题
@@ -93,6 +94,16 @@ const routes = [{
     path: '/add',
     name: 'add',
     component: Add
+  },
+  {
+    path: '/detail/:tid',
+    name: 'detail',
+    props: true,
+    component: Detail,
+    meta: {
+      // 通过后台接口动态添加到路由 addRoutes
+      types: ['get', 'add', 'delete']
+    }
   },
   {
     path: '/user/:uid',
@@ -184,8 +195,6 @@ router.beforeEach((to, from, next) => {
   // to and from are both route objects. must call `next`.
   const token = localStorage.getItem('token')
   const userInfo = JSON.parse(localStorage.getItem('userInfo'))
-
-
 
   if (token !== '' && token !== null) {
     const payload = jwt.decode(token)

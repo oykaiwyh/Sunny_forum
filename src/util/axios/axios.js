@@ -32,6 +32,8 @@ class HttpRequest {
   removeRequest(key, isRequest = false) {
     if (this.cancelapi[key] && isRequest) {
       this.cancelapi[key]('取消重复请求')
+      console.log('key', key);
+
     }
     // console.log('  this.cancelapi[key]', this.cancelapi);
     // console.log(' delete this.cancelapi[key]', delete this.cancelapi[key]);
@@ -83,8 +85,8 @@ class HttpRequest {
       this.removeRequest(key)
 
       if (res.status === 200) {
-        // return Promise.resolve(res.data)
-        return res.data
+        return Promise.resolve(res.data)
+        // return res.data
       } else {
         return Promise.reject(res)
       }

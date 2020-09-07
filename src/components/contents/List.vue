@@ -19,10 +19,11 @@
 </template>
 
 <script>
-import { getList } from "@/api/content";
 import ListItem from "./ListItem";
+import listMix from "@/mixin/list";
 export default {
   name: "list",
+  mixins: [listMix],
   data() {
     return {
       status: "",
@@ -42,7 +43,6 @@ export default {
   },
   watch: {
     current(newval, oldval) {
-      // console.log('current: ' + oldval + ',' + newval)
       // 去兼听current标签是否有变化，如果有变化，则需要重新进行查询
       this.init();
     },
@@ -54,70 +54,12 @@ export default {
       this.init();
     }
   },
-  mounted() {
-    let catalog = this.$route.params["catalog"];
-    if (typeof catalog !== "undefined" && catalog !== "") {
-      this.catalog = catalog;
-    }
-    this._getLists();
-  },
   methods: {
-    init() {
-      this.page = 0;
-      this.lists = [];
-      this.isEnd = false;
-      this._getLists();
-    },
-    _getLists() {
-      // 已通过拦截器拦截了多次请求,
-      // 方法一 加入一个请求锁，防止用户多次点击，等待数据返回后，再打开
-      //   if (this.isRepeat) return;
-      if (this.isEnd) return;
-      this.isRepeat = true;
-      let options = {
-        catalog: this.catalog,
-        isTop: 0,
-        page: this.page,
-        limit: this.limit,
-        sort: this.sort,
-        tag: this.tag,
-        status: this.status
-      };
-      getList(options)
-        .then(res => {
-          this.isRepeat = false; // 前端取消多次请求
-          console.log(res);
-          // 对于异常的判断，res.code 非200，我们给用户一个提示
-          // 判断是否lists长度为0，如果为零即可以直接赋值
-          // 当Lists长度不为0，后面请求的数据，加入到Lists里面来
-          if (res.code === 200) {
-            // 判断res.data的长度，如果小于20条，则是最后页
-            if (res.data.length < this.limit) {
-              this.isEnd = true;
-            }
-            if (this.lists.length === 0) {
-              this.lists = res.data;
-            } else {
-              this.lists = this.lists.concat(res.data);
-            }
-          }
-        })
-        .catch(err => {
-          if (err) {
-            this.$alert(err.message);
-          }
-        });
-    },
-    nextPage() {
-      this.page++;
-      this._getLists();
-    },
     search(val) {
       if (typeof val === "undefined" && this.current === "") {
         return;
       }
       this.current = val;
-      console.log(val);
       switch (val) {
         // 未结贴
         case 0:
@@ -134,11 +76,11 @@ export default {
           this.status = "";
           this.tag = "精华";
           break;
-        // 按照时间去查询 时间
+        // 按照时间去查询
         case 3:
           this.sort = "created";
           break;
-        // 按照评论数去查询 热议
+        // 按照评论数去查询
         case 4:
           this.sort = "answer";
           break;

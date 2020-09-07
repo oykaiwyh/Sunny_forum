@@ -39,7 +39,7 @@
 </template>
 
 <script>
-// import { getHotSignRecord } from '@/api/hot'
+import { getHotSignRecord } from "@/api/hot";
 export default {
   name: "sign-list",
   props: {
@@ -57,7 +57,7 @@ export default {
     };
   },
   mounted() {
-    // this.getList();
+    this.getList();
   },
   methods: {
     choose(val) {

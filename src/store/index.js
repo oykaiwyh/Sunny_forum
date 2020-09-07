@@ -7,6 +7,7 @@ export default new Vuex.Store({
   state: {
     sid: '',
     isLogin: false,
+    isHide: false, //显示需登录组件状态
     token: '',
     userInfo: {}
   },
@@ -29,6 +30,10 @@ export default new Vuex.Store({
     //设置用户的基本信息
     setIslogin(state, value) {
       state.isLogin = value
+    },
+    // 设置container的状态
+    setHide(state, value) {
+      state.isHide = value
     },
   },
   actions: {},

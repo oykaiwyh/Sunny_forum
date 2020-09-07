@@ -11,6 +11,12 @@ import Alert from '@/components/modules/alert'
 import Pop from '@/components/modules/pop'
 // axios.defaults.baseURL = process.env.NODE_ENV !== 'production' ? 'http://localhost:3000' : ''
 
+import filters from '@/util/dateconfig/index'
+// Vue.filter('moment', formDate)
+Object.keys(filters).forEach(item => {
+  Vue.filter(item, filters[item])
+})
+
 const originalPush = VueRouter.prototype.push
 VueRouter.prototype.push = function push(location) {
   return originalPush.call(this, location).catch(err => err)

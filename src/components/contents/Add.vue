@@ -1,5 +1,5 @@
 <template>
-  <div class="layui-container fly-marginTop">
+  <div class="layui-container fly-marginTop" :class="{'d-hide': isHide}">
     <div class="fly-panel" pad20 style="padding-top: 5px;">
       <!--<div class="fly-none">没有权限</div>-->
       <div class="layui-form layui-form-pane">
@@ -56,7 +56,6 @@
                           <label for="L_title" class="layui-form-label">标题</label>
                           <div class="layui-input-block">
                             <input type="text" class="layui-input" v-model="title" />
-                            <!-- <input type="hidden" name="id" value="{{d.edit.id}}"> -->
                           </div>
                         </div>
                         <div class="layui-row">
@@ -65,7 +64,7 @@
                       </validation-provider>
                     </div>
                   </div>
-                  <sunny-editor></sunny-editor>
+                  <sunny-editor @changeContent="add"></sunny-editor>
                   <div class="layui-form-item">
                     <div class="layui-inline">
                       <label class="layui-form-label">悬赏飞吻</label>
@@ -142,6 +141,7 @@
 <script>
 import Editor from "@/components/modules/editor";
 import codeMix from "@/mixin/code";
+import { addPost } from "@/api/content";
 
 export default {
   name: "add",
@@ -156,6 +156,7 @@ export default {
       cataIndex: 0,
       favIndex: 0,
       title: "",
+      content: "",
       catalogs: [
         {
           text: "请选择",
@@ -181,7 +182,29 @@ export default {
       favList: [20, 30, 50, 60, 80]
     };
   },
-
+  computed: {
+    isHide() {
+      return this.$store.state.isHide;
+    }
+  },
+  mounted() {
+    const saveData = localStorage.getItem("addData");
+    if (saveData && saveData !== "") {
+      this.$confirm(
+        "是否加载未编辑完的内容？",
+        () => {
+          const obj = JSON.parse(saveData);
+          this.content = obj.content;
+          this.title = obj.title;
+          this.cataIndex = obj.cataIndex;
+          this.favIndex = obj.favIndex;
+        },
+        () => {
+          localStorage.setItem("addData", "");
+        }
+      );
+    }
+  },
   methods: {
     changeSelect() {
       this.isSelect = !this.isSelect;
@@ -194,6 +217,46 @@ export default {
     },
     chooseFav(item, index) {
       this.favIndex = index;
+    },
+    add(val) {
+      this.content = val;
+    },
+    async submit() {
+      const isValid = await this.$refs.observer.validate();
+      if (!isValid) {
+        return;
+      }
+      // 文章内容是否为空的判断
+      if (this.content.trim() === "") {
+        this.$alert("文章内容不得为空！");
+        return;
+      }
+      // 添加新的文章
+      addPost({
+        title: this.title,
+        catalog: this.catalogs[this.cataIndex].value,
+        content: this.content,
+        fav: this.favList[this.favIndex],
+        code: this.code,
+        sid: this.$store.state.sid
+      }).then(res => {
+        if (res.code === 200) {
+          // 清空已经发布的内容
+          localStorage.setItem("addData", "");
+          this.$pop("", "发贴成功!");
+          setTimeout(() => {
+            // this.$router.push({
+            //   name: "detail",
+            //   params: { tid: res.data._id }
+            // });
+            this.$router.push({
+              name: "index"
+            });
+          }, 2000);
+        } else {
+          this.$alert(res.msg);
+        }
+      });
     }
   }
 };
