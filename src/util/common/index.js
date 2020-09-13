@@ -11,6 +11,7 @@ const getParams = (key, url) => {
   return null
 }
 
+// 过滤网页路由的参数
 const getParam = (name, url) => {
   if (!url) url = location.href
   name = name.replace(/[\\[]/, '\\\\[').replace(/[\]]/, '\\\\]')
@@ -42,6 +43,9 @@ const scrollToElem = (elem, duration, offset) => {
   let start
   window.requestAnimationFrame(function step(timestamp) {
     if (!start) start = timestamp
+    // console.log('start', start);
+    // console.log('timestamp', timestamp);
+
     // 计算时间的差值，根据差值计算偏移量
     const time = timestamp - start
     let percent = Math.min(time / duration, 1)

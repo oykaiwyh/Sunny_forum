@@ -61,6 +61,9 @@ const getDetail = (tid) => {
   return axios.get('/public/content/detail?tid=' + tid, headers)
 }
 
+//编辑贴子
+const updatePost = (data) => axios.post('/content/update', data)
+
 export {
   getList,
   getTips,
@@ -68,5 +71,6 @@ export {
   getLinks,
   uploadImg,
   addPost,
-  getDetail
+  getDetail,
+  updatePost
 }

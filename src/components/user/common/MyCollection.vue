@@ -24,26 +24,27 @@
         </tr>
       </tbody>
     </table>
-    <!-- <imooc-page
-      v-show="total > 0"
+    <sunny-page
+      v-show="total > 1"
       :total="total"
       :current="current"
       :align="'left'"
       :hasTotal="true"
       :hasSelect="true"
       @changeCurrent="handleChange"
-    ></imooc-page>-->
+    ></sunny-page>
   </div>
 </template>
 
 <script>
-// import { getCollect } from "@/api/user";
-// import Pagination from "@/components/modules/pagination/Index";
+import { getCollect } from "@/api/user";
+import Page from "@/components/modules/pagination/index";
+
 export default {
   name: "my-collection",
-  //   components: {
-  //     "imooc-page": Pagination
-  //   },
+  components: {
+    "sunny-page": Page
+  },
   data() {
     return {
       list: [],
@@ -65,6 +66,8 @@ export default {
         if (res.code === 200) {
           this.list = res.data;
           this.total = res.total;
+        } else {
+          this.$pop("shake", res.msg);
         }
       });
     },

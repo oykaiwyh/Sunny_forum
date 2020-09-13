@@ -2,12 +2,8 @@
   <div class="layui-container fly-marginTop fly-user-main">
     <ul class="layui-nav layui-nav-tree" lay-filter="test">
       <!-- 侧边导航: <ul class="layui-nav layui-nav-tree layui-nav-side"> -->
-      <li
-        class="layui-nav-item layui-nav-itemed"
-        v-for="(item,index) in lists"
-        :key="'center'+index"
-      >
-        <router-link :to="{name:item.link}">
+      <li class="layui-nav-item" v-for="(item,index) in lists" :key="'center' + index">
+        <router-link :to="{name: item.link, params: {uid: uid}}" :active-class="item.activeClass">
           <i class="layui-icon" :class="item.icon"></i>
           {{item.name}}
         </router-link>

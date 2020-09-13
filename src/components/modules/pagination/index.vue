@@ -61,8 +61,8 @@
     </div>
     <div class="total" v-if="hasTotal">
       到第
-      <input type="text" class="imooc-input text-center" />
-      页 共 {{12}} 页
+      <input type="text" class="imooc-input text-center" @keyup.enter="jumpTo" />
+      页 共 {{totalPages}} 页
     </div>
     <div v-if="hasSelect">
       <div
@@ -153,9 +153,19 @@ export default {
     this.options = _.uniq(_.sortBy(_.concat(this.options, this.size)));
     this.optIndex = this.options.indexOf(this.size);
   },
+  watch: {
+    total(newval, oldval) {
+      this.initPages();
+    }
+  },
+  computed: {
+    totalPages() {
+      return Math.ceil(this.total / this.limit);
+    }
+  },
   methods: {
     initPages() {
-      const length = Math.ceil(this.total / this.limit);
+      let length = Math.ceil(this.total / this.limit);
       this.pages = _.range(1, length + 1);
     },
     changeFav() {
@@ -168,6 +178,7 @@ export default {
           "changeCurrent",
           Math.floor((this.limit * this.current) / this.options[index])
         );
+        this.$emit("changeLimit", this.options[index]);
       }
       this.optIndex = index;
       this.limit = this.options[this.optIndex];
@@ -190,7 +201,7 @@ export default {
     },
     next() {
       let cur = 0;
-      if (this.current + 1 > this.pages.length) {
+      if (this.current + 1 >= this.pages.length) {
         cur = this.pages.length - 1;
       } else {
         cur = this.current + 1;
@@ -198,7 +209,25 @@ export default {
       this.$emit("changeCurrent", cur);
     },
     changeIndex(val) {
-      this.$emit("changeCurrent", val);
+      if (val !== this.current) {
+        this.$emit("changeCurrent", val);
+      }
+    },
+    jumpTo(event) {
+      const result = event.target.value;
+      let cur = this.current;
+      console.log(result);
+      console.log(this.pages.length);
+
+      if (result > this.pages.length || result < 0) {
+        this.$pop("shake", "请输入正确的页码");
+        return;
+      } else {
+        cur = result - 1;
+      }
+      if (cur !== this.current) {
+        this.$emit("changeCurrent", cur);
+      }
     }
   }
 };

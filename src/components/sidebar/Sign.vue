@@ -16,7 +16,7 @@
     </div>
     <div class="fly-panel-main fly-signin-main">
       <template v-if="!isSign">
-        <button class="layui-btn layui-btn-danger" id="LAY_signin" @click="sign()">今日签到</button>
+        <button class="layui-btn layui-btn-danger" id="LAY_signin" @click="sign">今日签到</button>
         <span>
           可获得
           <cite>{{favs}}</cite>飞吻
@@ -56,6 +56,16 @@ export default {
       isSign: false
     };
   },
+  watch: {
+    userInfo(newval, oldval) {
+      if (newval.isSign === true) {
+        this.nextSign();
+        this.isSign = true;
+      } else {
+        this.isSign = false;
+      }
+    }
+  },
   computed: {
     favs() {
       let count = parseInt(this.count);
@@ -88,6 +98,9 @@ export default {
     },
     isLogin() {
       return this.$store.state.isLogin;
+    },
+    userInfo() {
+      return this.$store.state.userInfo;
     }
   },
   mounted() {
@@ -149,12 +162,6 @@ export default {
       //   this.msg = '今日已签到'
       // }
     },
-    userInfo() {
-      return this.$store.state.userInfo;
-    },
-    // isLogin() {
-    //   return this.$store.state.isLogin;
-    // },
     showInfo() {
       this.isShow = true;
     },
@@ -179,9 +186,9 @@ export default {
         if (res.code === 200) {
           user.favs = res.favs;
           user.count = res.count;
+          this.$pop("", "签到成功！");
         } else {
           this.$pop("", "您已签到");
-
           //   this.$alert("user");
         }
         this.isSign = true;
@@ -189,6 +196,7 @@ export default {
         user.lastSign = res.lastSign;
         this.$store.commit("setUserInfo", user);
       });
+      this.nextSign();
     }
   }
 };

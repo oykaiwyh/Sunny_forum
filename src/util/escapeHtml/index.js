@@ -10,7 +10,6 @@ const escapeHtml = (val = '') => {
   let face = /face\[\W{1,}]/g //去掉了对空格的匹配，对应index里的自定义face也要取消空格
   if (face.test(result)) {
     let group = result.match(face)
-    console.log('group', group);
     group.map(item => {
       const key = item.match(/\[\S+\]/g)[0]
       result = result.replace(item, `<img src="${faces[key]}">`)

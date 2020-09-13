@@ -44,7 +44,7 @@
 </template>
 <script>
 import Sign from "@/components/sidebar/Sign.vue";
-
+import { getInfo } from "@/api/user";
 export default {
   name: "selfcenter",
   components: {
@@ -116,9 +116,21 @@ export default {
       ]
     };
   },
+  mounted() {
+    this.getUserInfo();
+  },
   computed: {
     userInfo() {
       return this.$store.state.userInfo;
+    }
+  },
+  methods: {
+    getUserInfo() {
+      getInfo({ uid: this.userInfo._id }).then(res => {
+        if (res.code === 200) {
+          this.$store.commit("setUserInfo", res.data);
+        }
+      });
     }
   }
 };

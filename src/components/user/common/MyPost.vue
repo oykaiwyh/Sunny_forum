@@ -60,26 +60,27 @@
         </tbody>
       </table>
     </div>
-    <!-- <imooc-page
-      v-show="total > 1"
+    <sunny-page
+      v-show="total >= 1"
       :total="total"
       :current="current"
       :align="'left'"
       :hasTotal="true"
       :hasSelect="true"
       @changeCurrent="handleChange"
-    ></imooc-page>-->
+    ></sunny-page>
   </div>
 </template>
 
 <script>
-// import { getPostListByUid, deletePostByUid } from "@/api/user";
-// import Pagination from '@/components/modules/pagination/Index'
+import { getPostListByUid, deletePostByUid } from "@/api/user";
+import Page from "@/components/modules/pagination/index";
+
 export default {
   name: "my-post",
-  //   components: {
-  //     'imooc-page': Pagination
-  //   },
+  components: {
+    "sunny-page": Page
+  },
   data() {
     return {
       list: [],
@@ -88,59 +89,61 @@ export default {
       page: 0,
       limit: 10
     };
+  },
+  mounted() {
+    this.getPostList();
+  },
+  methods: {
+    getPostList() {
+      getPostListByUid({
+        page: this.current,
+        limit: this.limit
+      }).then(res => {
+        if (res.code === 200) {
+          this.list = res.data;
+          this.total = res.total;
+        } else {
+          this.$alert(this.msg);
+        }
+      });
+    },
+    deletePost(item) {
+      this.$confirm(
+        "确定删除吗?",
+        () => {
+          if (item.isEnd !== "0") {
+            this.$pop("shake", "帖子已结贴，无法删除！");
+            return;
+          }
+          deletePostByUid({
+            tid: item._id
+          }).then(res => {
+            if (res.code === 200) {
+              this.$pop("", "删除成功！");
+              this.list.splice(this.list.indexOf(item), 1);
+            } else {
+              this.$pop("shake", res.msg);
+            }
+          });
+        },
+        () => {}
+      );
+    },
+    handleChange(val) {
+      this.current = val;
+      this.getPostList();
+    },
+    editPost(item) {
+      if (item.isEnd === "1") {
+        this.$pop("shake", "帖子已经结贴，无法编辑");
+      } else {
+        this.$router.push({
+          name: "edit",
+          params: { tid: item._id, page: item }
+        });
+      }
+    }
   }
-  //   mounted() {
-  //     this.getPostList();
-  //   },
-  //   methods: {
-  //     getPostList() {
-  //       getPostListByUid({
-  //         page: this.current,
-  //         limit: this.limit
-  //       }).then(res => {
-  //         if (res.code === 200) {
-  //           this.list = res.data;
-  //           this.total = res.total;
-  //         }
-  //       });
-  //     },
-  //     deletePost(item) {
-  //       this.$confirm(
-  //         "确定删除吗?",
-  //         () => {
-  //           if (item.isEnd !== "0") {
-  //             this.$pop("shake", "帖子已结贴，无法删除！");
-  //             return;
-  //           }
-  //           deletePostByUid({
-  //             tid: item._id
-  //           }).then(res => {
-  //             if (res.code === 200) {
-  //               this.$pop("", "删除成功！");
-  //               this.list.splice(this.list.indexOf(item), 1);
-  //             } else {
-  //               this.$pop("shake", res.msg);
-  //             }
-  //           });
-  //         },
-  //         () => {}
-  //       );
-  //     },
-  //     handleChange(val) {
-  //       this.current = val;
-  //       this.getPostList();
-  //     },
-  //     editPost(item) {
-  //       if (item.isEnd === "1") {
-  //         this.$pop("shake", "帖子已经结贴，无法编辑");
-  //       } else {
-  //         this.$router.push({
-  //           name: "edit",
-  //           params: { tid: item._id, page: item }
-  //         });
-  //       }
-  //     }
-  //   }
 };
 </script>
 

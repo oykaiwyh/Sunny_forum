@@ -74,6 +74,7 @@ import CodeInput from "./Code";
 import PreView from "./Preview";
 export default {
   name: "Editor",
+  props: ["initContent"],
   components: {
     Face,
     ImgUpload,
@@ -116,7 +117,11 @@ export default {
       .querySelector("body")
       .removeEventListener("click", this.handleOtherClick);
   },
-
+  watch: {
+    initContent(newval, oldval) {
+      this.content = newval;
+    }
+  },
   methods: {
     handleOtherClick(e) {
       // 触发隐藏本组件的关闭事件
